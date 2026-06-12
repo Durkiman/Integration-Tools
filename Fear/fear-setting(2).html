@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fear Setting — Durim Morina</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --forest:#0D3D30;--forest-mid:#174F3F;--moss:#4A7C59;--moss-light:#7AAD88;
+  --page:#F7F4EE;--sand:#C8BFA8;--ink:#1A1A18;--ink-mid:#3D3D38;--ink-soft:#6B6B63;
+  --cream:#EDE9E0;--hl:#D4EDC0;
+  --serif:'Playfair Display',Georgia,serif;--sans:'Inter',system-ui,sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--page);color:var(--ink);font-family:var(--sans);font-weight:400;line-height:1.7;-webkit-font-smoothing:antialiased;min-height:100vh}
+
+/* ── LANG SCREEN ── */
+.lang-screen{position:fixed;inset:0;background:var(--forest);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center}
+.lang-screen.hidden{display:none}
+.lang-breath{width:120px;height:120px;border-radius:50%;border:1.5px solid rgba(122,173,136,0.35);position:relative;margin-bottom:2.5rem;animation:breathe 5s ease-in-out infinite;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.lang-breath::before{content:'';position:absolute;width:80px;height:80px;border-radius:50%;border:1px solid rgba(122,173,136,0.22);animation:breathe 5s ease-in-out infinite;animation-delay:0.3s}
+.lang-breath::after{content:'';position:absolute;width:38px;height:38px;border-radius:50%;background:rgba(74,124,89,0.18);animation:breathe 5s ease-in-out infinite;animation-delay:0.6s}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:0.6}50%{transform:scale(1.12);opacity:1}}
+.lang-name{font-family:var(--serif);font-size:1rem;color:rgba(247,244,238,0.5);letter-spacing:0.1em;margin-bottom:0.4rem}
+.lang-prompt{font-family:var(--serif);font-size:clamp(1.3rem,4vw,1.9rem);color:#F7F4EE;font-weight:400;line-height:1.35;max-width:440px;margin-bottom:2.5rem}
+.lang-prompt em{font-style:italic;color:var(--moss-light)}
+.lang-btns{display:flex;gap:0.85rem;flex-wrap:wrap;justify-content:center}
+.lang-btn{background:none;border:1.5px solid rgba(122,173,136,0.45);color:#F7F4EE;font-family:var(--sans);font-size:13px;font-weight:500;letter-spacing:0.08em;padding:11px 26px;border-radius:40px;cursor:pointer;transition:background 0.2s,border-color 0.2s,transform 0.15s}
+.lang-btn:hover{background:rgba(122,173,136,0.15);border-color:rgba(122,173,136,0.7);transform:translateY(-1px)}
+.lang-btn.selected{background:var(--moss);border-color:var(--moss)}
+
+/* ── NAV ── */
+.tab-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(247,244,238,0.96);backdrop-filter:blur(8px);border-bottom:1px solid rgba(200,191,168,0.4);display:flex;align-items:center;justify-content:center;height:52px;padding:0 0.5rem;gap:0;overflow-x:auto}
+.tab-btn{background:none;border:none;cursor:pointer;font-family:var(--sans);font-size:11.5px;font-weight:400;letter-spacing:0.06em;color:var(--ink-soft);padding:0 0.85rem;height:52px;position:relative;transition:color 0.2s;white-space:nowrap;flex-shrink:0}
+.tab-btn::after{content:'';position:absolute;bottom:0;left:0.6rem;right:0.6rem;height:2px;background:var(--moss);border-radius:2px 2px 0 0;transform:scaleX(0);transition:transform 0.2s}
+.tab-btn:hover{color:var(--ink)}
+.tab-btn.active{color:var(--forest);font-weight:500}
+.tab-btn.active::after{transform:scaleX(1)}
+/* language switcher in nav */
+.lang-switch{margin-left:auto;display:flex;gap:4px;padding-right:0.4rem;flex-shrink:0}
+.lang-switch button{background:none;border:1px solid transparent;border-radius:4px;font-family:var(--sans);font-size:10.5px;font-weight:500;letter-spacing:0.06em;color:var(--ink-soft);padding:3px 7px;cursor:pointer;transition:all 0.15s}
+.lang-switch button:hover{color:var(--ink)}
+.lang-switch button.active{color:var(--forest);border-color:rgba(74,124,89,0.35);background:rgba(74,124,89,0.07)}
+
+/* ── PANELS ── */
+.panel{display:none;padding-top:52px}
+.panel.active{display:block}
+
+/* ── TAB 1 LANDING ── */
+.hero{background:var(--forest);min-height:calc(100vh - 52px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4rem 2rem 5rem;text-align:center}
+.hero-eyebrow{font-size:11px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--moss-light);margin-bottom:1rem}
+.hero-title{font-family:var(--serif);font-size:clamp(2.2rem,6vw,3.6rem);font-weight:400;color:#F7F4EE;line-height:1.2;max-width:560px;margin-bottom:1.4rem}
+.hero-title em{font-style:italic;color:var(--moss-light)}
+.hero-sub{font-size:15px;color:rgba(247,244,238,0.55);max-width:420px;line-height:1.8;margin-bottom:3rem}
+.hero-steps{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin-bottom:2.8rem;max-width:480px}
+.hero-step{display:flex;align-items:center;gap:0.6rem;font-size:12.5px;color:rgba(247,244,238,0.5)}
+.hero-step-num{width:22px;height:22px;border-radius:50%;border:1px solid rgba(122,173,136,0.4);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--moss-light);flex-shrink:0}
+.hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--moss);color:#F7F4EE;font-family:var(--sans);font-size:13px;font-weight:500;letter-spacing:0.06em;padding:12px 28px;border-radius:40px;border:none;cursor:pointer;transition:background 0.2s,transform 0.15s}
+.hero-cta:hover{background:#3d6b4a;transform:translateY(-1px)}
+.listen-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.09);border-radius:12px;padding:1rem 1.2rem;display:flex;align-items:center;gap:1rem;max-width:300px;margin:2.2rem auto 0;text-align:left}
+.listen-art{width:48px;height:48px;border-radius:6px;background:linear-gradient(135deg,#1a3a2a,#0a2018);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.listen-art svg{width:20px;height:20px;opacity:0.5}
+.listen-meta{flex:1;min-width:0}
+.listen-title{font-family:var(--serif);font-size:14px;color:#F7F4EE}
+.listen-artist{font-size:11px;color:rgba(247,244,238,0.45);margin-top:2px}
+.listen-album{font-size:10px;letter-spacing:0.09em;text-transform:uppercase;color:var(--moss-light);margin-top:3px;opacity:0.8}
+.wave-bars{display:flex;align-items:flex-end;gap:3px;height:22px;flex-shrink:0}
+.wave-bars span{display:block;width:3px;border-radius:2px;background:var(--moss-light);animation:wave 1.2s ease-in-out infinite;opacity:0.65}
+.wave-bars span:nth-child(1){height:7px;animation-delay:0s}
+.wave-bars span:nth-child(2){height:15px;animation-delay:0.15s}
+.wave-bars span:nth-child(3){height:20px;animation-delay:0.3s}
+.wave-bars span:nth-child(4){height:12px;animation-delay:0.45s}
+.wave-bars span:nth-child(5){height:18px;animation-delay:0.6s}
+@keyframes wave{0%,100%{transform:scaleY(0.5);opacity:0.35}50%{transform:scaleY(1);opacity:0.85}}
+@media(prefers-reduced-motion:reduce){.lang-breath,.lang-breath::before,.lang-breath::after,.wave-bars span{animation:none}}
+
+/* ── TAB 2 READING ── */
+.reading-wrap{max-width:680px;margin:0 auto;padding:4rem 2rem 6rem}
+.reading-intro{background:var(--cream);border-radius:8px;padding:1.2rem 1.5rem;margin-bottom:3rem;font-size:13.5px;color:var(--ink-soft);line-height:1.7}
+.reading-intro strong{color:var(--ink-mid);font-weight:500}
+.reading-section{margin-bottom:3.5rem}
+.r-eyebrow{font-size:10px;font-weight:500;letter-spacing:0.13em;text-transform:uppercase;color:var(--moss);margin-bottom:0.5rem}
+.reading-wrap h2{font-family:var(--serif);font-size:clamp(1.4rem,3vw,1.9rem);font-weight:400;color:var(--ink);line-height:1.3;margin-bottom:1.3rem}
+.reading-wrap p{font-size:15.5px;line-height:1.88;color:var(--ink-mid);margin-bottom:1.1rem}
+.reading-wrap p:last-child{margin-bottom:0}
+.r-divider{border:none;border-top:1px solid var(--sand);margin:3.5rem 0;opacity:0.5}
+.reading-wrap blockquote{border-left:2px solid var(--moss);padding:0.4rem 0 0.4rem 1.4rem;margin:1.8rem 0}
+.reading-wrap blockquote p{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--ink-mid);margin-bottom:0.4rem}
+.reading-wrap blockquote cite{font-size:11px;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink-soft);font-style:normal}
+.hl{background:var(--hl);border-radius:2px;padding:1px 3px;color:var(--ink)}
+
+/* ── TAB 3 EXERCISE ── */
+.exercise-wrap{max-width:720px;margin:0 auto;padding:3rem 2rem 5rem}
+.ex-notice{background:#FFF8EC;border:1px solid #E8D9B5;border-radius:8px;padding:0.9rem 1.2rem;margin-bottom:2.5rem;font-size:13px;color:#7A6435;line-height:1.65;display:flex;gap:0.7rem;align-items:flex-start}
+.ex-notice-icon{font-size:15px;flex-shrink:0;margin-top:1px}
+.ex-part{margin-bottom:3.5rem}
+.ex-part-label{display:inline-block;font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--forest);background:var(--cream);border-radius:3px;padding:3px 10px;margin-bottom:0.8rem}
+.ex-part h3{font-family:var(--sans);font-size:1.2rem;font-weight:500;color:var(--ink);margin-bottom:0.6rem}
+.ex-part>p{font-size:14.5px;line-height:1.8;color:var(--ink-soft);margin-bottom:1.5rem}
+.prompt-item{margin-bottom:1.4rem}
+.prompt-q{font-family:var(--sans);font-style:normal;font-size:14.5px;font-weight:500;color:var(--ink);line-height:1.65;margin-bottom:0.55rem;padding-left:0.75rem;border-left:2px solid var(--moss)}
+.prompt-item textarea{width:100%;min-height:80px;background:#fff;border:1px solid rgba(200,191,168,0.7);border-radius:6px;padding:0.85rem 1rem;font-family:var(--sans);font-size:14.5px;line-height:1.7;color:var(--ink);resize:vertical;transition:border-color 0.2s,box-shadow 0.2s;outline:none}
+.prompt-item textarea:focus{border-color:var(--moss);box-shadow:0 0 0 3px rgba(74,124,89,0.1)}
+.prompt-item textarea::placeholder{color:#b0a898}
+.ex-divider{border:none;border-top:1px solid var(--sand);margin:3rem 0;opacity:0.5}
+.review-cta-wrap{background:var(--forest);border-radius:12px;padding:2rem;text-align:center;margin-top:1rem}
+.review-cta-wrap p{color:rgba(247,244,238,0.65);font-size:14px;margin-bottom:1.2rem;line-height:1.7}
+.review-btn{display:inline-flex;align-items:center;gap:8px;background:#F7F4EE;color:var(--forest);font-family:var(--sans);font-size:13px;font-weight:500;letter-spacing:0.05em;padding:12px 26px;border-radius:40px;border:none;cursor:pointer;transition:background 0.2s,transform 0.15s}
+.review-btn:hover{background:var(--cream);transform:translateY(-1px)}
+.review-btn svg{width:14px;height:14px}
+
+/* ── TAB 4 WHAT NEXT ── */
+.results-wrap{max-width:680px;margin:0 auto;padding:4rem 2rem 6rem}
+.results-wrap h2{font-family:var(--serif);font-size:clamp(1.4rem,3vw,1.9rem);font-weight:400;color:var(--ink);line-height:1.3;margin-bottom:1.3rem}
+.results-wrap p{font-size:15.5px;line-height:1.88;color:var(--ink-mid);margin-bottom:1.1rem}
+.results-wrap p:last-child{margin-bottom:0}
+.res-eyebrow{font-size:10px;font-weight:500;letter-spacing:0.13em;text-transform:uppercase;color:var(--moss);margin-bottom:0.5rem}
+.res-divider{border:none;border-top:1px solid var(--sand);margin:3.5rem 0;opacity:0.5}
+.r-section{margin-bottom:3.5rem}
+.signal-list{list-style:none;margin:1.5rem 0 2rem}
+.signal-list li{display:flex;gap:0.9rem;align-items:flex-start;padding:0.9rem 0;border-bottom:1px solid rgba(200,191,168,0.35);font-size:15px;line-height:1.75;color:var(--ink-mid)}
+.signal-list li:last-child{border-bottom:none}
+.signal-dot{width:8px;height:8px;border-radius:50%;background:var(--moss);margin-top:8px;flex-shrink:0}
+.signal-list strong{font-weight:500;color:var(--ink)}
+.invitation{background:var(--forest);border-radius:14px;padding:3rem 2.5rem;text-align:center;position:relative;overflow:hidden;margin-top:3rem}
+.invitation::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 60% 30%,rgba(74,124,89,0.2) 0%,transparent 65%);pointer-events:none}
+.invitation-eyebrow{font-size:10px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--moss-light);margin-bottom:1.2rem}
+.invitation h2{font-family:var(--serif);font-size:clamp(1.4rem,3vw,1.9rem);font-weight:400;color:#F7F4EE;margin-bottom:1.2rem;line-height:1.3}
+.invitation p{font-size:15px;color:rgba(247,244,238,0.7);max-width:460px;margin:0 auto 1rem;line-height:1.8}
+.invitation-link{display:inline-block;margin-top:1.5rem;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);color:#F7F4EE;font-family:var(--sans);font-size:13px;font-weight:500;letter-spacing:0.05em;padding:11px 26px;border-radius:40px;text-decoration:none;transition:background 0.2s}
+.invitation-link:hover{background:rgba(255,255,255,0.16)}
+
+/* ── TAB 5 REVIEW ── */
+.review-wrap{max-width:680px;margin:0 auto;padding:3.5rem 2rem 6rem}
+.review-header{text-align:center;padding:2.5rem 2rem 2rem;margin-bottom:2.5rem;border-bottom:1px solid var(--sand)}
+.review-brand-name{font-family:var(--serif);font-size:1.1rem;font-weight:400;letter-spacing:0.08em;color:var(--forest);margin-bottom:0.3rem}
+.review-brand-tagline{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--moss);opacity:0.75}
+.review-doc-title{font-family:var(--serif);font-size:clamp(1.6rem,4vw,2.2rem);font-weight:400;color:var(--ink);margin:1.4rem 0 0.4rem;line-height:1.25}
+.review-doc-date{font-size:12px;color:var(--ink-soft);letter-spacing:0.04em}
+.review-part{margin-bottom:3rem}
+.review-part-label{font-size:10px;font-weight:500;letter-spacing:0.13em;text-transform:uppercase;color:var(--moss);margin-bottom:1.2rem;padding-bottom:0.6rem;border-bottom:1px solid rgba(200,191,168,0.4)}
+.review-item{margin-bottom:1.8rem}
+.review-item-q{font-size:13px;font-weight:500;color:var(--ink-soft);margin-bottom:0.45rem;line-height:1.5}
+.review-item-a{font-size:15px;line-height:1.85;color:var(--ink-mid);background:var(--cream);border-radius:6px;padding:0.9rem 1.1rem;min-height:2.5rem;white-space:pre-wrap;word-break:break-word}
+.review-item-a.empty{color:var(--sand);font-style:italic;font-size:13.5px}
+.review-divider{border:none;border-top:1px solid var(--sand);margin:2.5rem 0;opacity:0.4}
+.review-export-section{text-align:center;padding:2.5rem 1rem;background:var(--forest);border-radius:12px;margin-top:1rem;position:relative;overflow:hidden}
+.review-export-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(74,124,89,0.25) 0%,transparent 60%);pointer-events:none}
+.review-export-section p{font-size:14px;color:rgba(247,244,238,0.65);margin-bottom:1.4rem;max-width:380px;margin-left:auto;margin-right:auto;line-height:1.7}
+.export-btn{display:inline-flex;align-items:center;gap:8px;background:#F7F4EE;color:var(--forest);font-family:var(--sans);font-size:13px;font-weight:500;letter-spacing:0.05em;padding:12px 26px;border-radius:40px;border:none;cursor:pointer;transition:background 0.2s,transform 0.15s}
+.export-btn:hover{background:var(--cream);transform:translateY(-1px)}
+.export-btn svg{width:15px;height:15px}
+.review-footer{text-align:center;margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(200,191,168,0.35)}
+.review-footer-name{font-family:var(--serif);font-size:1rem;color:var(--forest);margin-bottom:0.25rem}
+.review-footer-url{font-size:11.5px;color:var(--ink-soft);letter-spacing:0.05em}
+
+/* ── DARK MODE ── */
+@media(prefers-color-scheme:dark){
+  :root{--page:#111410;--cream:#1C1F1A;--sand:#2E3329;--ink:#E8E4DA;--ink-mid:#C4BFB3;--ink-soft:#8A8880;--hl:rgba(74,124,89,0.25)}
+  body{background:var(--page);color:var(--ink)}
+  .tab-nav{background:rgba(17,20,16,0.96);border-bottom-color:rgba(46,51,41,0.8)}
+  .tab-btn.active{color:#C4F0D0}
+  .reading-intro{background:var(--cream);color:var(--ink-soft)}
+  .reading-intro strong{color:var(--ink-mid)}
+  .reading-wrap h2,.results-wrap h2{color:var(--ink)}
+  .reading-wrap p,.results-wrap p,.ex-part>p{color:var(--ink-mid)}
+  .reading-wrap blockquote p{color:var(--ink-mid)}
+  .reading-wrap blockquote cite,.review-item-q{color:var(--ink-soft)}
+  .hl{background:rgba(74,124,89,0.28);color:var(--ink)}
+  .ex-part-label{background:var(--cream);color:#7AAD88}
+  .ex-part h3,.prompt-q{color:var(--ink)}
+  .prompt-item textarea{background:#1A1D18;border-color:rgba(70,75,60,0.7);color:var(--ink)}
+  .prompt-item textarea::placeholder{color:#4A4F44}
+  .prompt-item textarea:focus{border-color:var(--moss);box-shadow:0 0 0 3px rgba(74,124,89,0.15)}
+  .ex-notice{background:#1E1A0E;border-color:#3A3018;color:#C8A86A}
+  .signal-list li{color:var(--ink-mid);border-bottom-color:rgba(46,51,41,0.6)}
+  .signal-list strong{color:var(--ink)}
+  .r-divider,.res-divider,.ex-divider{border-top-color:var(--sand)}
+  .review-brand-name{color:#7AAD88}
+  .review-doc-title,.results-wrap h2{color:var(--ink)}
+  .review-item-a{background:var(--cream);color:var(--ink-mid)}
+  .review-item-a.empty{color:#4A4F44}
+  .review-header{border-bottom-color:var(--sand)}
+  .review-part-label{color:var(--moss-light);border-bottom-color:rgba(46,51,41,0.5)}
+  .review-footer-name{color:var(--moss-light)}
+  .review-footer-url{color:var(--ink-soft)}
+  .lang-switch button.active{color:#C4F0D0;border-color:rgba(74,124,89,0.5);background:rgba(74,124,89,0.12)}
+}
+
+@media(max-width:600px){
+  .reading-wrap,.exercise-wrap,.results-wrap,.review-wrap{padding-left:1.25rem;padding-right:1.25rem}
+  .tab-btn{font-size:10.5px;padding:0 0.5rem}
+  .invitation,.review-export-section{padding:1.8rem 1.4rem}
+  .hero-steps{gap:1rem}
+  .review-header{padding:1.8rem 1.2rem 1.5rem}
+  .lang-btns{gap:0.65rem}
+}
+</style>
+</head>
+<body>
+
+<!-- LANGUAGE SELECTION SCREEN -->
+<div class="lang-screen" id="lang-screen">
+  <div class="lang-breath"></div>
+  <div class="lang-name">Durim Morina</div>
+  <h1 class="lang-prompt">Choose your language <em>before we begin</em></h1>
+  <div class="lang-btns">
+    <button class="lang-btn" onclick="setLang('en')">English</button>
+    <button class="lang-btn" onclick="setLang('nl')">Nederlands</button>
+    <button class="lang-btn" onclick="setLang('fr')">Français</button>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<nav class="tab-nav" role="tablist" id="main-nav" style="display:none">
+  <button class="tab-btn active" data-tab="landing"  data-i18n-nav="nav_welcome"  onclick="switchTab('landing')">Welcome</button>
+  <button class="tab-btn"        data-tab="reading"  data-i18n-nav="nav_reading"  onclick="switchTab('reading')">Reading</button>
+  <button class="tab-btn"        data-tab="exercise" data-i18n-nav="nav_exercise" onclick="switchTab('exercise')">Exercise</button>
+  <button class="tab-btn"        data-tab="results"  data-i18n-nav="nav_results"  onclick="switchTab('results')">What next</button>
+  <button class="tab-btn"        data-tab="review"   data-i18n-nav="nav_review"   onclick="switchTab('review')">Review</button>
+  <div class="lang-switch">
+    <button onclick="setLang('en')" data-lang="en">EN</button>
+    <button onclick="setLang('nl')" data-lang="nl">NL</button>
+    <button onclick="setLang('fr')" data-lang="fr">FR</button>
+  </div>
+</nav>
+
+<div id="main-app" style="display:none">
+
+<!-- TAB 1 — WELCOME -->
+<div class="panel active" id="panel-landing">
+  <section class="hero">
+    <p class="hero-eyebrow" data-i18n="hero_eyebrow">Post-session resource</p>
+    <h1 class="hero-title" data-i18n="hero_title">Fear setting: <em>looking at what holds you still</em></h1>
+    <p class="hero-sub" data-i18n="hero_sub">Something opened in the session. This is a space to meet it on the page. Move through the tabs in order, there is no rush.</p>
+    <div class="hero-steps">
+      <div class="hero-step"><div class="hero-step-num">1</div><span data-i18n="step_listen">Listen</span></div>
+      <div class="hero-step"><div class="hero-step-num">2</div><span data-i18n="step_read">Read</span></div>
+      <div class="hero-step"><div class="hero-step-num">3</div><span data-i18n="step_write">Write</span></div>
+      <div class="hero-step"><div class="hero-step-num">4</div><span data-i18n="step_reflect">Reflect</span></div>
+    </div>
+    <button class="hero-cta" onclick="switchTab('reading')">
+      <span data-i18n="hero_cta">Begin</span>
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+    </button>
+    <div class="listen-card">
+      <div class="listen-art">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#7AAD88" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>
+      </div>
+      <div class="listen-meta">
+        <div class="listen-title">She Moves Me</div>
+        <div class="listen-artist">Savanna</div>
+        <div class="listen-album">Breath of Earth</div>
+      </div>
+      <div class="wave-bars"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+    <p style="font-size:11px;color:rgba(247,244,238,0.3);margin-top:0.8rem;letter-spacing:0.05em" data-i18n="listen_hint">Start with this song before moving on</p>
+  </section>
+</div>
+
+<!-- TAB 2 — READING -->
+<div class="panel" id="panel-reading">
+  <div class="reading-wrap" id="reading-content"></div>
+</div>
+
+<!-- TAB 3 — EXERCISE -->
+<div class="panel" id="panel-exercise">
+  <div class="exercise-wrap" id="exercise-content"></div>
+</div>
+
+<!-- TAB 4 — WHAT NEXT -->
+<div class="panel" id="panel-results">
+  <div class="results-wrap" id="results-content"></div>
+</div>
+
+<!-- TAB 5 — REVIEW -->
+<div class="panel" id="panel-review">
+  <div class="review-wrap">
+    <div class="review-header">
+      <div class="review-brand-name">Durim Morina</div>
+      <div class="review-brand-tagline" data-i18n="brand_tagline">Breathwork Facilitation</div>
+      <h1 class="review-doc-title" data-i18n="review_doc_title">Fear Setting</h1>
+      <p class="review-doc-date" id="review-date"></p>
+    </div>
+    <div id="review-content">
+      <p style="color:var(--ink-soft);font-size:14px;text-align:center;padding:2rem 0" data-i18n="review_empty">Complete the exercise first, then come back here to review your answers.</p>
+    </div>
+    <div class="review-export-section" style="margin-top:2.5rem">
+      <p data-i18n="export_desc">Copy your answers into a notes app or export them as a plain text file to keep or bring to your next session.</p>
+      <button class="export-btn" onclick="exportAnswers()">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v8M4 7l4 4 4-4M2 12v1a1 1 0 001 1h10a1 1 0 001-1v-1"/></svg>
+        <span data-i18n="export_btn">Save as text file</span>
+      </button>
+    </div>
+    <div class="review-footer">
+      <div class="review-footer-name">Durim Morina</div>
+      <div class="review-footer-url">durimmorina.net</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main-app -->
+
+<script>
+var LANG = 'en';
+
+/* ═══════════════════════════════════
+   TRANSLATIONS
+═══════════════════════════════════ */
+var T = {
+en: {
+  nav_welcome:'Welcome', nav_reading:'Reading', nav_exercise:'Exercise', nav_results:'What next', nav_review:'Review',
+  hero_eyebrow:'Post-session resource',
+  hero_title:'Fear setting: <em>looking at what holds you still</em>',
+  hero_sub:'Something opened in the session. This is a space to meet it on the page. Move through the tabs in order, there is no rush.',
+  step_listen:'Listen', step_read:'Read', step_write:'Write', step_reflect:'Reflect',
+  hero_cta:'Begin',
+  listen_hint:'Start with this song before moving on',
+  brand_tagline:'Breathwork Facilitation',
+  review_doc_title:'Fear Setting',
+  review_empty:'Complete the exercise first, then come back here to review your answers.',
+  export_desc:'Copy your answers into a notes app or export them as a plain text file to keep or bring to your next session.',
+  export_btn:'Save as text file',
+  review_answers_cta:'When you are done, review your answers in a clean overview before saving.',
+  review_answers_btn:'Review my answers',
+  nothing_written:'Nothing written',
+  reading_html: `
+    <div class="reading-intro"><strong>Before you scroll:</strong> the highlighted passages are what matter most. They are worth sitting with before you move to the exercise. Everything else is context that helps the exercise land.</div>
+    <div class="reading-section">
+      <p class="r-eyebrow">Background</p>
+      <h2>What is fear setting?</h2>
+      <p>Breathwork has a way of clearing the surface layer. Once that happens, what tends to emerge is not confusion but something more specific: a decision that has been waiting, a move you know you need to make, something you keep almost doing and then don't. <span class="hl">Fear is usually what's in the way, and most of us deal with it by not looking at it directly.</span></p>
+      <p>Fear setting is a writing practice developed by Tim Ferriss that does the opposite. Instead of setting goals, you set your fears. You define them, examine them, and most importantly, you measure them against something we almost never stop to consider: the actual cost of not acting.</p>
+      <p>Ferriss returns to this exercise at least once a month. He describes it as the single most powerful practice he does. The premise is borrowed from Stoic philosophy and the mechanics are simple enough to do with a notebook and thirty minutes of honest attention.</p>
+    </div>
+    <hr class="r-divider">
+    <div class="reading-section">
+      <p class="r-eyebrow">Why it works</p>
+      <h2>The problem with vague fear</h2>
+      <p>Most fear operates in the vague. It lives in the peripheral, in the background hum of "what if" and "I'm not sure" and "maybe later." It doesn't announce itself as fear. It tends to dress up as practicality, as timing, as waiting until things are more stable. Ferriss calls this last one optimistic denial, and it is one of the more insidious forms fear takes, because it looks reasonable from the outside.</p>
+      <p><span class="hl">What fear setting does is force the vague into the specific. When you write down the worst thing that could realistically happen, something shifts. The thing that felt enormous and uncontainable becomes something with edges.</span> You can look at it. You can measure it. And almost always, what you find is that on a scale of one to ten, the worst case scenario lands somewhere around a three or four: temporary and survivable, while the best case scenario is a nine or ten that changes things permanently.</p>
+      <blockquote><p>"I was risking an unlikely and temporary 3 or 4 for a probable and permanent 9 or 10. There was practically no risk, only huge life-changing upside potential."</p><cite>Tim Ferriss</cite></blockquote>
+    </div>
+    <hr class="r-divider">
+    <div class="reading-section">
+      <p class="r-eyebrow">The deeper root</p>
+      <h2>Where this comes from: Stoic philosophy</h2>
+      <p>Fear setting is not a new idea. It is a modern form of a Stoic practice called <em>premeditatio malorum</em>, the premeditation of evils. The ancient Stoics believed that deliberately imagining the worst possible outcome was not pessimism but a form of freedom. <span class="hl">If you have already sat with the worst and found you could live through it, nothing can hold you hostage.</span></p>
+      <blockquote><p>"Set aside a certain number of days, during which you shall be content with the scantiest and cheapest fare, with coarse and rough dress, saying to yourself the while: is this the condition that I feared?"</p><cite>Seneca</cite></blockquote>
+    </div>
+    <hr class="r-divider">
+    <div class="reading-section">
+      <p class="r-eyebrow">The part most people miss</p>
+      <h2>The cost of not acting</h2>
+      <p>We are very good at calculating the risk of acting. We are almost never asked to calculate the risk of staying still. But inaction is not neutral. <span class="hl">It has a cost, and that cost compounds over time in ways that are easy to ignore in the short term and very hard to ignore years later.</span></p>
+      <blockquote><p>"If you don't pursue those things that excite you, where will you be in one year, five years, ten years? If we define risk as the likelihood of an irreversible negative outcome, inaction is the greatest risk of all."</p><cite>Tim Ferriss</cite></blockquote>
+    </div>
+    <div style="text-align:center;padding-top:1rem">
+      <button class="hero-cta" style="background:var(--moss)" onclick="switchTab('exercise')">Go to the exercise <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+    </div>`,
+  exercise_html: `
+    <div class="ex-notice"><span class="ex-notice-icon">&#9888;</span><span><strong>This tool does not save your writing.</strong> Closing or refreshing the page will erase everything. It is recommended to write your answers in a notes app first, then paste them here.</span></div>
+    <div class="ex-part">
+      <span class="ex-part-label">Part one</span><h3>Define the nightmare</h3>
+      <p>Think of a decision, a change, or a move you have been considering and postponing. Write it at the top, then without filtering, name every fear that comes with it. The goal is specificity — vague fear keeps its power. Named fear loses it.</p>
+      <div class="prompt-item"><p class="prompt-q">What is the thing you keep almost deciding to do? Write it down without framing it or justifying it.</p><textarea id="q1" placeholder="Write here..."></textarea></div>
+      <div class="prompt-item"><p class="prompt-q">Write out every fear that comes up around it. Give each one its own line. Don't edit, don't rank. Just let it out.</p><textarea id="q2" placeholder="Write here..." style="min-height:120px"></textarea></div>
+      <div class="prompt-item"><p class="prompt-q">For each fear: how likely is this, realistically? If it happened, would the impact be temporary or permanent? Rate both on a scale of one to ten.</p><textarea id="q3" placeholder="Write here..." style="min-height:120px"></textarea></div>
+    </div>
+    <hr class="ex-divider">
+    <div class="ex-part">
+      <span class="ex-part-label">Part two</span><h3>What you could do if it went wrong</h3>
+      <p>We tend to imagine the worst outcome and then act as if nothing could be done about it. Writing this out doesn't mean planning for failure. It means discovering that failure is survivable.</p>
+      <div class="prompt-item"><p class="prompt-q">For each fear: what is one concrete thing you could do to reduce the chances of it happening before you even begin?</p><textarea id="q4" placeholder="Write here..." style="min-height:110px"></textarea></div>
+      <div class="prompt-item"><p class="prompt-q">If the worst did happen, what would your first move be? Who could you call? What resources do you have that you might be underestimating?</p><textarea id="q5" placeholder="Write here..." style="min-height:110px"></textarea></div>
+      <div class="prompt-item"><p class="prompt-q">Have you been through something difficult before and found your way through it? What did that actually look like?</p><textarea id="q6" placeholder="Write here..."></textarea></div>
+    </div>
+    <hr class="ex-divider">
+    <div class="ex-part">
+      <span class="ex-part-label">Part three</span><h3>The cost of not acting</h3>
+      <p>This is the section that tends to land hardest. Inaction feels like safety. This is where you measure whether it actually is.</p>
+      <div class="prompt-item"><p class="prompt-q">If you don't make this move, where will you be in one year? In three? Be honest, not kind to yourself.</p><textarea id="q7" placeholder="Write here..." style="min-height:110px"></textarea></div>
+      <div class="prompt-item"><p class="prompt-q">What does it feel like in your body when you imagine yourself still in the same place a year from now, having not tried?</p><textarea id="q8" placeholder="Write here..."></textarea></div>
+      <div class="prompt-item"><p class="prompt-q">What is the version of yourself that made the move? What does that person feel like to you, and what do they know that you are pretending not to?</p><textarea id="q9" placeholder="Write here..." style="min-height:110px"></textarea></div>
+    </div>
+    <div class="review-cta-wrap">
+      <p>When you are done, review your answers in a clean overview before saving.</p>
+      <button class="review-btn" onclick="buildReview();switchTab('review')">Review my answers <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+    </div>`,
+  results_html: `
+    <div class="r-section">
+      <p class="res-eyebrow">Reading what came up</p>
+      <h2>What to do with what you wrote</h2>
+      <p>The exercise won't tell you what to do. What it does is make the landscape of your fear visible, so you can stop navigating by anxiety and start navigating by something clearer.</p>
+      <ul class="signal-list">
+        <li><span class="signal-dot"></span><span><strong>Fears that shrank when you named them.</strong> Notice which ones lost their grip the moment you wrote them down. That is the exercise working.</span></li>
+        <li><span class="signal-dot"></span><span><strong>Fears that stayed large.</strong> A fear that remains significant after you have examined it is usually pointing at something real — a genuine risk, or an old story that has been running quietly for a long time.</span></li>
+        <li><span class="signal-dot"></span><span><strong>The repair column.</strong> If you struggled to fill in part two, that is information. The repair is almost always more available than it seems.</span></li>
+        <li><span class="signal-dot"></span><span><strong>The cost of inaction.</strong> If the body sensations in part three feel heavier than the fears in part one, that asymmetry is telling you something worth listening to.</span></li>
+        <li><span class="signal-dot"></span><span><strong>The version of yourself who moved.</strong> If you could feel that person clearly when you wrote about them, the knowing is already there. The work is finding the courage to act on it.</span></li>
+      </ul>
+    </div>
+    <hr class="res-divider">
+    <div class="r-section">
+      <p class="res-eyebrow">One thing to remember</p>
+      <h2>Fear does not go away. It changes shape.</h2>
+      <p>The point is not to arrive at fearlessness. The point is to change your relationship to fear. To stop letting the vague, unnamed version of it make decisions on your behalf.</p>
+      <p>Bring whatever came up to your next session. Not necessarily the answers, but the feeling underneath them.</p>
+    </div>
+    <div class="invitation">
+      <p class="invitation-eyebrow">Continue the work</p>
+      <h2>Bring it to a session</h2>
+      <p>What surfaces in writing often needs the breath to move through it fully. Come with the question, and we will find the way in together.</p>
+      <a class="invitation-link" href="https://www.durimmorina.net/breathwork#booking" target="_blank" rel="noopener">Book a session at durimmorina.net</a>
+    </div>`,
+  prompts:[
+    {part:'Part one — Define the nightmare', items:[
+      {id:'q1',q:'What is the thing you keep almost deciding to do?'},
+      {id:'q2',q:'Every fear that comes up around it.'},
+      {id:'q3',q:'How likely is each fear? Temporary or permanent (1–10).'}
+    ]},
+    {part:'Part two — What you could do if it went wrong', items:[
+      {id:'q4',q:'What could reduce the chances of each fear happening?'},
+      {id:'q5',q:'If the worst happened, what would your first move be?'},
+      {id:'q6',q:'Have you survived something hard before? What did that look like?'}
+    ]},
+    {part:'Part three — The cost of not acting', items:[
+      {id:'q7',q:'Where will you be in one year, in three, if you don\'t make this move?'},
+      {id:'q8',q:'What does it feel like in your body to imagine staying still?'},
+      {id:'q9',q:'The version of yourself that made the move — who is that person?'}
+    ]}
+  ]
+},
+
+nl: {
+  nav_welcome:'Welkom', nav_reading:'Lezen', nav_exercise:'Oefening', nav_results:'Wat nu', nav_review:'Overzicht',
+  hero_eyebrow:'Hulpmiddel na de sessie',
+  hero_title:'Angst benoemen: <em>kijken naar wat je tegenhoudt</em>',
+  hero_sub:'Er is iets geopend in de sessie. Dit is een ruimte om het op papier te ontmoeten. Ga op je eigen tempo door de tabbladen.',
+  step_listen:'Luister', step_read:'Lees', step_write:'Schrijf', step_reflect:'Reflecteer',
+  hero_cta:'Begin',
+  listen_hint:'Begin met dit lied voordat je verdergaat',
+  brand_tagline:'Ademoefeningen',
+  review_doc_title:'Angst Benoemen',
+  review_empty:'Voltooi eerst de oefening en kom dan hier terug voor een overzicht van je antwoorden.',
+  export_desc:'Kopieer je antwoorden naar een notitie-app of exporteer ze als tekstbestand om te bewaren of mee te nemen naar je volgende sessie.',
+  export_btn:'Opslaan als tekstbestand',
+  review_answers_cta:'Als je klaar bent, bekijk dan je antwoorden in een overzicht voordat je opslaat.',
+  review_answers_btn:'Mijn antwoorden bekijken',
+  nothing_written:'Niets geschreven',
+  reading_html: `
+    <div class="reading-intro"><strong>Voor je verder scrolt:</strong> de gemarkeerde passages zijn het belangrijkst. Neem er even de tijd voor voordat je naar de oefening gaat.</div>
+    <div class="reading-section">
+      <p class="r-eyebrow">Achtergrond</p>
+      <h2>Wat is angst benoemen?</h2>
+      <p>Ademwerk heeft de neiging de oppervlakkige laag weg te halen. Wat dan naar boven komt is geen verwarring, maar iets specifieks: een beslissing die al een tijdje wacht, een stap die je weet dat je moet zetten, iets wat je bijna steeds doet en dan toch niet. <span class="hl">Angst staat meestal in de weg, en de meesten van ons gaan ermee om door er niet direct naar te kijken.</span></p>
+      <p>Angst benoemen is een schrijfoefening ontwikkeld door Tim Ferriss. In plaats van doelen stellen, benoem je je angsten. Je definieert ze, onderzoekt ze, en meet ze af tegen iets wat we bijna nooit overwegen: de werkelijke kosten van niet handelen.</p>
+      <p>Ferriss doet deze oefening minstens één keer per maand. Hij beschrijft het als de krachtigste oefening die hij kent.</p>
+    </div>
+    <hr class="r-divider">
+    <div class="reading-section">
+      <p class="r-eyebrow">Waarom het werkt</p>
+      <h2>Het probleem met vage angst</h2>
+      <p>De meeste angst werkt in het vage. Het leeft in de achtergrond als een constante ruis van "wat als" en "ik weet het niet" en "misschien later". Het kondigt zichzelf niet aan als angst. Het vermomt zich als praktisch denken, als timing, als wachten tot alles stabieler wordt.</p>
+      <p><span class="hl">Wat angst benoemen doet, is het vage dwingen naar het specifieke. Als je het ergste opschrijft wat realistisch gezien kan gebeuren, verschuift er iets. Het ding dat enorm en oncontroleerbaar aanvoelde, krijgt ineens contouren.</span> Je kunt ernaar kijken. Je kunt het meten. En bijna altijd blijkt het op een schaal van één tot tien ergens rond de drie of vier te liggen — tijdelijk en overleefbaar.</p>
+      <blockquote><p>"Ik riskeerde een onwaarschijnlijke en tijdelijke 3 of 4 voor een waarschijnlijke en permanente 9 of 10. Er was praktisch geen risico, alleen enorm potentieel."</p><cite>Tim Ferriss</cite></blockquote>
+    </div>
+    <hr class="r-divider">
+    <div class="reading-section">
+      <p class="r-eyebrow">De diepere oorsprong</p>
+      <h2>Waar dit vandaan komt: Stoïcijnse filosofie</h2>
+      <p>Angst benoemen is geen nieuw idee. Het is een moderne vorm van de Stoïcijnse praktijk <em>premeditatio malorum</em> — het nadenken over het ergste. De Stoïcijnen geloofden dat het bewust inbeelden van het slechtste scenario geen pessimisme was, maar een vorm van vrijheid. <span class="hl">Als je het ergste al hebt onderzocht en ontdekt dat je ermee kunt leven, kan niets je meer gijzelen.</span></p>
+      <blockquote><p>"Reserveer een aantal dagen waarop je tevreden bent met het minste en goedkoopste voedsel, met ruwe kleding, en zeg tegen jezelf: is dit de toestand die ik vreesde?"</p><cite>Seneca</cite></blockquote>
+    </div>
+    <hr class="r-divider">
+    <div class="reading-section">
+      <p class="r-eyebrow">Het deel dat de meesten overslaan</p>
+      <h2>De kosten van niet handelen</h2>
+      <p>We zijn heel goed in het berekenen van het risico van handelen. Maar we worden bijna nooit gevraagd het risico van stilstaan te berekenen. Inactiviteit is niet neutraal. <span class="hl">Het heeft een prijs, en die prijs neemt in de loop van de tijd toe op een manier die op de korte termijn gemakkelijk te negeren is en jaren later heel moeilijk.</span></p>
+      <blockquote><p>"Als je de dingen die je opwinden niet nastreeft, waar zul je dan zijn over één jaar, vijf jaar, tien jaar? Als we risico definiëren als de kans op een onomkeerbare negatieve uitkomst, dan is inactiviteit het grootste risico van allemaal."</p><cite>Tim Ferriss</cite></blockquote>
+    </div>
+    <div style="text-align:center;padding-top:1rem">
+      <button class="hero-cta" style="background:var(--moss)" onclick="switchTab('exercise')">Naar de oefening <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+    </div>`,
+  exercise_html: `
+    <div class="ex-notice"><span class="ex-notice-icon">&#9888;</span><span><strong>Dit hulpmiddel slaat je schrijfwerk niet op.</strong> Als je de pagina sluit of vernieuwt, verdwijnt alles. Het is aanbevolen om je antwoorden eerst in een notitie-app te schrijven en ze daarna hier in te plakken.</span></div>
+    <div class="ex-part">
+      <span class="ex-part-label">Deel één</span><h3>Benoem de nachtmerrie</h3>
+      <p>Denk aan een beslissing, een verandering of een stap die je al een tijdje overweegt maar steeds uitstelt. Schrijf hem op, en noem dan zonder te filteren elke angst die ermee gepaard gaat. Het doel is specificiteit — vage angst behoudt zijn kracht. Benoemde angst verliest die.</p>
+      <div class="prompt-item"><p class="prompt-q">Wat is het ding dat je bijna steeds besluit te doen? Schrijf het op zonder het te kaderen of te rechtvaardigen.</p><textarea id="q1" placeholder="Schrijf hier..."></textarea></div>
+      <div class="prompt-item"><p class="prompt-q">Schrijf elke angst op die naar boven komt. Geef elk een eigen regel. Niet bewerken, niet rangschikken. Gewoon laten gaan.</p><textarea id="q2" placeholder="Schrijf hier..." style="min-height:120px"></textarea></div>
+      <div class="prompt-item"><p class="prompt-q">Hoe waarschijnlijk is elke angst realistisch gezien? Zou de impact tijdelijk of permanent zijn? Geef beide een score van één tot tien.</p><textarea id="q3" placeholder="Schrijf hier..." style="min-height:120px"></textarea></div>
+    </div>
+    <hr class="ex-divider">
+    <div class="ex-part">
+      <span class="ex-part-label">Deel twee</span><h3>Wat je zou kunnen doen als het misloopt</h3>
+      <p>We stellen ons het slechtste voor en doen dan alsof er niets aan gedaan kan worden. Dit opschrijven betekent niet plannen voor mislukking. Het betekent ontdekken dat mislukking overleefbaar is.</p>
+      <div class="prompt-item"><p class="prompt-q">Wat is één concreet ding dat je kunt doen om de kans op elke angst te verkleinen voordat je zelfs maar begint?</p><textarea id="q4" placeholder="Schrijf hier..." style="min-height:110px"></textarea></div>
+      <div class="prompt-item"><p class="prompt-q">Als het ergste zou gebeuren, wat zou dan je eerste stap zijn? Wie zou je bellen? Welke middelen heb je die je misschien onderschat?</p><textarea id="q5" placeholder="Schrijf hier..." style="min-height:110px"></textarea></div>
+      <div class="prompt-item"><p class="prompt-q">Ben je al eens door iets moeilijks gegaan en er doorheen gekomen? Hoe zag dat er in de praktijk uit?</p><textarea id="q6" placeholder="Schrijf hier..."></textarea></div>
+    </div>
+    <hr class="ex-divider">
+    <div class="ex-part">
+      <span class="ex-part-label">Deel drie</span><h3>De kosten van niet handelen</h3>
+      <p>Dit is het deel dat het hardst aankomt. Niet handelen voelt als veiligheid. Hier meet je of dat ook echt zo is.</p>
+      <div class="prompt-item"><p class="prompt-q">Als je deze stap niet zet, waar ben je dan over één jaar? Over drie jaar? Wees eerlijk, niet vriendelijk voor jezelf.</p><textarea id="q7" placeholder="Schrijf hier..." style="min-height:110px"></textarea></div>
+      <div class="prompt-item"><p class="prompt-q">Hoe voelt het in je lichaam als je je voorstelt dat je over een jaar nog op dezelfde plek staat, zonder het geprobeerd te hebben?</p><textarea id="q8" placeholder="Schrijf hier..."></textarea></div>
+      <div class="prompt-item"><p class="prompt-q">Wie is de versie van jezelf die de stap wél heeft gezet? Hoe voelt die persoon voor jou, en wat weet die persoon wat jij doet alsof je het niet weet?</p><textarea id="q9" placeholder="Schrijf hier..." style="min-height:110px"></textarea></div>
+    </div>
+    <div class="review-cta-wrap">
+      <p>Als je klaar bent, bekijk dan je antwoorden in een overzicht voordat je opslaat.</p>
+      <button class="review-btn" onclick="buildReview();switchTab('review')">Mijn antwoorden bekijken <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+    </div>`,
+  results_html: `
+    <div class="r-section">
+      <p class="res-eyebrow">Lezen wat naar boven is gekomen</p>
+      <h2>Wat te doen met wat je hebt geschreven</h2>
+      <p>De oefening vertelt je niet wat je moet doen. Wat het doet, is het landschap van je angst zichtbaar maken, zodat je kunt navigeren op basis van helderheid in plaats van angst.</p>
+      <ul class="signal-list">
+        <li><span class="signal-dot"></span><span><strong>Angsten die kleiner werden toen je ze benoemde.</strong> Merk op welke hun grip verloren op het moment dat je ze opschreef. Dat is de oefening die werkt.</span></li>
+        <li><span class="signal-dot"></span><span><strong>Angsten die groot bleven.</strong> Een angst die significant blijft nadat je hem hebt onderzocht, wijst meestal op iets echts — een reëel risico, of een oud verhaal dat al lang stilletjes loopt.</span></li>
+        <li><span class="signal-dot"></span><span><strong>De herstelkolom.</strong> Als je moeite had met deel twee, is dat informatie. Herstel is bijna altijd toegankelijker dan het lijkt.</span></li>
+        <li><span class="signal-dot"></span><span><strong>De kosten van niet handelen.</strong> Als de lichamelijke sensaties in deel drie zwaarder aanvoelen dan de angsten in deel één, vertelt die asymmetrie je iets.</span></li>
+        <li><span class="signal-dot"></span><span><strong>De versie van jezelf die de stap zette.</strong> Als je die persoon duidelijk kon voelen, is de kennis er al. Het werk is de moed vinden om ernaar te handelen.</span></li>
+      </ul>
+    </div>
+    <hr class="res-divider">
+    <div class="r-section">
+      <p class="res-eyebrow">Eén ding om te onthouden</p>
+      <h2>Angst verdwijnt niet. Het verandert van vorm.</h2>
+      <p>Het doel is niet angstloosheid te bereiken. Het doel is je relatie met angst te veranderen — om de vage, naamloze versie ervan te stoppen met beslissingen namens jou te laten nemen.</p>
+      <p>Breng wat er in deze oefening naar boven is gekomen mee naar je volgende sessie. Niet noodzakelijk de antwoorden, maar het gevoel eronder.</p>
+    </div>
+    <div class="invitation">
+      <p class="invitation-eyebrow">Ga verder met het werk</p>
+      <h2>Breng het mee naar een sessie</h2>
+      <p>Wat in schrijven naar de oppervlakte komt, heeft vaak de adem nodig om er volledig doorheen te bewegen. Kom met de vraag, en we vinden samen de weg naar binnen.</p>
+      <a class="invitation-link" href="https://www.durimmorina.net/breathwork#booking" target="_blank" rel="noopener">Boek een sessie op durimmorina.net</a>
+    </div>`,
+  prompts:[
+    {part:'Deel één — Benoem de nachtmerrie', items:[
+      {id:'q1',q:'Wat is het ding dat je bijna steeds besluit te doen?'},
+      {id:'q2',q:'Elke angst die naar boven komt.'},
+      {id:'q3',q:'Hoe waarschijnlijk is elke angst? Tijdelijk of permanent (1–10).'}
+    ]},
+    {part:'Deel twee — Wat je zou kunnen doen als het misloopt', items:[
+      {id:'q4',q:'Wat kan de kans op elke angst verkleinen voordat je begint?'},
+      {id:'q5',q:'Als het ergste zou gebeuren, wat is je eerste stap?'},
+      {id:'q6',q:'Ben je al eens door iets moeilijks gegaan?'}
+    ]},
+    {part:'Deel drie — De kosten van niet handelen', items:[
+      {id:'q7',q:'Waar ben je over één jaar, over drie, als je deze stap niet zet?'},
+      {id:'q8',q:'Hoe voelt het in je lichaam om je voor te stellen dat je stilstaat?'},
+      {id:'q9',q:'De versie van jezelf die de stap zette — wie is dat?'}
+    ]}
+  ]
+},
+
+fr: {
+  nav_welcome:'Bienvenue', nav_reading:'Lecture', nav_exercise:'Exercice', nav_results:'Et après', nav_review:'Révision',
+  hero_eyebrow:'Ressource post-séance',
+  hero_title:'Définir ses peurs : <em>regarder ce qui nous retient</em>',
+  hero_sub:'Quelque chose s\'est ouvert pendant la séance. C\'est un espace pour le rencontrer sur la page. Avancez dans les onglets à votre rythme.',
+  step_listen:'Écouter', step_read:'Lire', step_write:'Écrire', step_reflect:'Réfléchir',
+  hero_cta:'Commencer',
+  listen_hint:'Commencez par cette chanson avant de continuer',
+  brand_tagline:'Facilitation de Respiration',
+  review_doc_title:'Définir ses peurs',
+  review_empty:'Complétez d\'abord l\'exercice, puis revenez ici pour revoir vos réponses.',
+  export_desc:'Copiez vos réponses dans une application de notes ou exportez-les comme fichier texte pour les conserver ou les apporter à votre prochaine séance.',
+  export_btn:'Enregistrer comme fichier texte',
+  review_answers_cta:'Une fois terminé, consultez vos réponses dans un aperçu avant de sauvegarder.',
+  review_answers_btn:'Voir mes réponses',
+  nothing_written:'Rien d\'écrit',
+  reading_html: `
+    <div class="reading-intro"><strong>Avant de faire défiler :</strong> les passages surlignés sont les plus importants. Prenez le temps de les laisser résonner avant de passer à l'exercice.</div>
+    <div class="reading-section">
+      <p class="r-eyebrow">Contexte</p>
+      <h2>Qu'est-ce que définir ses peurs&nbsp;?</h2>
+      <p>La respiration a une façon d'effacer la couche superficielle. Ce qui émerge alors n'est pas de la confusion, mais quelque chose de plus précis : une décision qui attendait, un pas que vous savez devoir faire, quelque chose que vous continuez à presque décider et à ne pas faire. <span class="hl">La peur est généralement ce qui se met en travers du chemin, et la plupart d'entre nous la gèrent en ne la regardant pas directement.</span></p>
+      <p>Définir ses peurs est une pratique d'écriture développée par Tim Ferriss qui fait le contraire. Au lieu de fixer des objectifs, vous fixez vos peurs. Vous les définissez, les examinez, et surtout vous les mesurez à l'aune de quelque chose que nous ne considérons presque jamais : le véritable coût de l'inaction.</p>
+    </div>
+    <hr class="r-divider">
+    <div class="reading-section">
+      <p class="r-eyebrow">Pourquoi ça fonctionne</p>
+      <h2>Le problème de la peur vague</h2>
+      <p>La plupart des peurs opèrent dans le vague. Elles vivent en périphérie, dans le bourdonnement de fond du "et si" et du "je ne suis pas sûr" et du "peut-être plus tard". Ferriss appelle cela le déni optimiste, et c'est l'une des formes les plus insidieuses que prend la peur, car elle paraît raisonnable de l'extérieur.</p>
+      <p><span class="hl">Ce que fait cet exercice, c'est forcer le vague vers le spécifique. Quand vous écrivez la pire chose qui pourrait réalistement se produire, quelque chose change. La chose qui semblait énorme et incontrôlable prend des contours.</span> Presque toujours, sur une échelle de un à dix, le pire scénario se situe autour de trois ou quatre — temporaire et surmontable.</p>
+      <blockquote><p>"Je risquais un 3 ou 4 improbable et temporaire pour un 9 ou 10 probable et permanent. Il n'y avait pratiquement aucun risque, seulement un énorme potentiel."</p><cite>Tim Ferriss</cite></blockquote>
+    </div>
+    <hr class="r-divider">
+    <div class="reading-section">
+      <p class="r-eyebrow">La racine profonde</p>
+      <h2>D'où vient cette pratique : la philosophie stoïcienne</h2>
+      <p>Définir ses peurs n'est pas une idée nouvelle. C'est une forme moderne d'une pratique stoïcienne appelée <em>premeditatio malorum</em> — la préméditation des maux. Les Stoïciens croyaient que s'imaginer délibérément le pire n'était pas du pessimisme mais une forme de liberté. <span class="hl">Si vous vous êtes déjà assis avec le pire et constaté que vous pouviez y survivre, rien ne peut vous tenir en otage.</span></p>
+      <blockquote><p>"Mets de côté un certain nombre de jours pendant lesquels tu te contenteras de la nourriture la plus frugale, de vêtements rudes, et dis-toi : est-ce là la condition que je redoutais&nbsp;?"</p><cite>Sénèque</cite></blockquote>
+    </div>
+    <hr class="r-divider">
+    <div class="reading-section">
+      <p class="r-eyebrow">La partie que la plupart oublient</p>
+      <h2>Le coût de l'inaction</h2>
+      <p>Nous sommes très doués pour calculer le risque d'agir. On nous demande rarement de calculer le risque de rester immobiles. Mais l'inaction n'est pas neutre. <span class="hl">Elle a un coût, et ce coût s'accumule avec le temps d'une façon facile à ignorer à court terme et très difficile à ignorer des années plus tard.</span></p>
+      <blockquote><p>"Si vous ne poursuivez pas les choses qui vous passionnent, où serez-vous dans un an, cinq ans, dix ans ? Si nous définissons le risque comme la probabilité d'un résultat négatif irréversible, l'inaction est le plus grand risque de tous."</p><cite>Tim Ferriss</cite></blockquote>
+    </div>
+    <div style="text-align:center;padding-top:1rem">
+      <button class="hero-cta" style="background:var(--moss)" onclick="switchTab('exercise')">Aller à l'exercice <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+    </div>`,
+  exercise_html: `
+    <div class="ex-notice"><span class="ex-notice-icon">&#9888;</span><span><strong>Cet outil ne sauvegarde pas votre écriture.</strong> Fermer ou actualiser la page effacera tout. Il est conseillé d'écrire vos réponses d'abord dans une application de notes, puis de les coller ici.</span></div>
+    <div class="ex-part">
+      <span class="ex-part-label">Partie un</span><h3>Définir le cauchemar</h3>
+      <p>Pensez à une décision, un changement ou un pas que vous envisagez et reportez depuis un moment. Écrivez-le en haut, puis sans filtrer, nommez chaque peur qui l'accompagne. L'objectif est la spécificité — la peur vague conserve son pouvoir. La peur nommée le perd.</p>
+      <div class="prompt-item"><p class="prompt-q">Quelle est la chose que vous continuez à presque décider de faire ? Écrivez-la sans la cadrer ni la justifier.</p><textarea id="q1" placeholder="Écrivez ici..."></textarea></div>
+      <div class="prompt-item"><p class="prompt-q">Écrivez chaque peur qui surgit. Donnez à chacune sa propre ligne. Sans éditer, sans classer. Laissez simplement sortir.</p><textarea id="q2" placeholder="Écrivez ici..." style="min-height:120px"></textarea></div>
+      <div class="prompt-item"><p class="prompt-q">Pour chaque peur : quelle est sa probabilité réaliste ? Son impact serait-il temporaire ou permanent ? Notez les deux sur une échelle de un à dix.</p><textarea id="q3" placeholder="Écrivez ici..." style="min-height:120px"></textarea></div>
+    </div>
+    <hr class="ex-divider">
+    <div class="ex-part">
+      <span class="ex-part-label">Partie deux</span><h3>Ce que vous pourriez faire si ça tournait mal</h3>
+      <p>Nous avons tendance à imaginer le pire scénario et à agir comme si rien ne pouvait y être fait. Écrire cela ne signifie pas planifier l'échec. Cela signifie découvrir que l'échec est surmontable.</p>
+      <div class="prompt-item"><p class="prompt-q">Pour chaque peur : qu'est-ce qu'une chose concrète que vous pourriez faire pour en réduire les chances avant même de commencer ?</p><textarea id="q4" placeholder="Écrivez ici..." style="min-height:110px"></textarea></div>
+      <div class="prompt-item"><p class="prompt-q">Si le pire se produisait, quelle serait votre premier mouvement ? Qui appelleriez-vous ? Quelles ressources avez-vous que vous sous-estimez peut-être ?</p><textarea id="q5" placeholder="Écrivez ici..." style="min-height:110px"></textarea></div>
+      <div class="prompt-item"><p class="prompt-q">Avez-vous déjà traversé quelque chose de difficile et vous en êtes sorti ? À quoi cela ressemblait-il concrètement ?</p><textarea id="q6" placeholder="Écrivez ici..."></textarea></div>
+    </div>
+    <hr class="ex-divider">
+    <div class="ex-part">
+      <span class="ex-part-label">Partie trois</span><h3>Le coût de l'inaction</h3>
+      <p>C'est la partie qui touche le plus. L'inaction ressemble à de la sécurité. C'est ici que vous mesurez si c'est vraiment le cas.</p>
+      <div class="prompt-item"><p class="prompt-q">Si vous ne faites pas ce pas, où en serez-vous dans un an ? Dans trois ans ? Soyez honnête, pas indulgent.</p><textarea id="q7" placeholder="Écrivez ici..." style="min-height:110px"></textarea></div>
+      <div class="prompt-item"><p class="prompt-q">Que ressentez-vous dans votre corps en imaginant que vous êtes toujours au même endroit dans un an, sans avoir essayé ?</p><textarea id="q8" placeholder="Écrivez ici..."></textarea></div>
+      <div class="prompt-item"><p class="prompt-q">Qui est la version de vous qui a fait le pas ? Que ressent cette personne pour vous, et que sait-elle que vous faites semblant de ne pas savoir ?</p><textarea id="q9" placeholder="Écrivez ici..." style="min-height:110px"></textarea></div>
+    </div>
+    <div class="review-cta-wrap">
+      <p>Une fois terminé, consultez vos réponses dans un aperçu avant de sauvegarder.</p>
+      <button class="review-btn" onclick="buildReview();switchTab('review')">Voir mes réponses <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+    </div>`,
+  results_html: `
+    <div class="r-section">
+      <p class="res-eyebrow">Lire ce qui a émergé</p>
+      <h2>Que faire de ce que vous avez écrit</h2>
+      <p>L'exercice ne vous dira pas quoi faire. Ce qu'il fait, c'est rendre visible le paysage de votre peur, pour que vous puissiez naviguer avec clarté plutôt qu'avec anxiété.</p>
+      <ul class="signal-list">
+        <li><span class="signal-dot"></span><span><strong>Les peurs qui ont rétréci quand vous les avez nommées.</strong> Remarquez lesquelles ont perdu leur emprise dès que vous les avez écrites. C'est l'exercice qui fonctionne.</span></li>
+        <li><span class="signal-dot"></span><span><strong>Les peurs qui sont restées grandes.</strong> Une peur qui reste significative après examen pointe généralement vers quelque chose de réel — un risque véritable, ou une vieille histoire qui tourne silencieusement depuis longtemps.</span></li>
+        <li><span class="signal-dot"></span><span><strong>La colonne de réparation.</strong> Si vous avez eu du mal avec la partie deux, c'est une information. La réparation est presque toujours plus accessible qu'il n'y paraît.</span></li>
+        <li><span class="signal-dot"></span><span><strong>Le coût de l'inaction.</strong> Si les sensations corporelles de la partie trois semblent plus lourdes que les peurs de la partie un, cette asymétrie vous dit quelque chose.</span></li>
+        <li><span class="signal-dot"></span><span><strong>La version de vous qui a fait le pas.</strong> Si vous avez pu ressentir cette personne clairement, le savoir est déjà là. Le travail est de trouver le courage d'agir en conséquence.</span></li>
+      </ul>
+    </div>
+    <hr class="res-divider">
+    <div class="r-section">
+      <p class="res-eyebrow">Une chose à retenir</p>
+      <h2>La peur ne disparaît pas. Elle change de forme.</h2>
+      <p>L'objectif n'est pas d'atteindre l'absence de peur. L'objectif est de changer votre relation à la peur — de cesser de laisser la version vague et sans nom prendre des décisions à votre place.</p>
+      <p>Apportez ce qui a émergé à votre prochaine séance. Pas forcément les réponses, mais le sentiment en dessous.</p>
+    </div>
+    <div class="invitation">
+      <p class="invitation-eyebrow">Continuer le travail</p>
+      <h2>Apportez-le à une séance</h2>
+      <p>Ce qui remonte à la surface dans l'écriture a souvent besoin du souffle pour se déplacer pleinement. Venez avec la question, et nous trouverons le chemin ensemble.</p>
+      <a class="invitation-link" href="https://www.durimmorina.net/breathwork#booking" target="_blank" rel="noopener">Réserver une séance sur durimmorina.net</a>
+    </div>`,
+  prompts:[
+    {part:'Partie un — Définir le cauchemar', items:[
+      {id:'q1',q:'Quelle est la chose que vous continuez à presque décider de faire ?'},
+      {id:'q2',q:'Chaque peur qui surgit.'},
+      {id:'q3',q:'Probabilité de chaque peur ? Temporaire ou permanent (1–10).'}
+    ]},
+    {part:'Partie deux — Ce que vous pourriez faire si ça tournait mal', items:[
+      {id:'q4',q:'Qu\'est-ce qui pourrait réduire les chances de chaque peur ?'},
+      {id:'q5',q:'Si le pire se produisait, quel serait votre premier mouvement ?'},
+      {id:'q6',q:'Avez-vous déjà traversé quelque chose de difficile ?'}
+    ]},
+    {part:'Partie trois — Le coût de l\'inaction', items:[
+      {id:'q7',q:'Où en serez-vous dans un an, dans trois, si vous ne faites pas ce pas ?'},
+      {id:'q8',q:'Que ressentez-vous dans votre corps en imaginant l\'immobilité ?'},
+      {id:'q9',q:'La version de vous qui a fait le pas — qui est cette personne ?'}
+    ]}
+  ]
+}
+};
+
+/* ═══════════════════════════════════
+   LANGUAGE LOGIC
+═══════════════════════════════════ */
+function setLang(lang){
+  LANG = lang;
+  document.documentElement.lang = lang;
+
+  // hide lang screen, show app
+  document.getElementById('lang-screen').classList.add('hidden');
+  document.getElementById('main-nav').style.display = 'flex';
+  document.getElementById('main-app').style.display = 'block';
+
+  // update lang switcher buttons
+  document.querySelectorAll('.lang-switch button').forEach(function(b){
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+
+  var t = T[lang];
+
+  // update nav labels
+  document.querySelectorAll('[data-i18n-nav]').forEach(function(el){
+    el.textContent = t[el.getAttribute('data-i18n-nav')];
+  });
+
+  // update simple i18n elements
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var key = el.getAttribute('data-i18n');
+    if(t[key] !== undefined) el.innerHTML = t[key];
+  });
+
+  // inject dynamic content panels
+  document.getElementById('reading-content').innerHTML  = t.reading_html;
+  document.getElementById('exercise-content').innerHTML = t.exercise_html;
+  document.getElementById('results-content').innerHTML  = t.results_html;
+
+  // clear review if lang changed
+  var rc = document.getElementById('review-content');
+  rc.innerHTML = '<p style="color:var(--ink-soft);font-size:14px;text-align:center;padding:2rem 0">' + t.review_empty + '</p>';
+
+  switchTab('landing');
+}
+
+function switchTab(name){
+  document.querySelectorAll('.tab-btn').forEach(function(btn){
+    var on = btn.dataset.tab === name;
+    btn.classList.toggle('active', on);
+    btn.setAttribute('aria-selected', on);
+  });
+  document.querySelectorAll('.panel').forEach(function(p){
+    p.classList.toggle('active', p.id === 'panel-' + name);
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function buildReview(){
+  var t = T[LANG];
+  var date = new Date().toLocaleDateString(
+    LANG === 'nl' ? 'nl-BE' : LANG === 'fr' ? 'fr-FR' : 'en-GB',
+    {day:'numeric',month:'long',year:'numeric'}
+  );
+  document.getElementById('review-date').textContent = date;
+
+  var html = '';
+  t.prompts.forEach(function(part, pi){
+    html += '<div class="review-part">';
+    html += '<div class="review-part-label">' + part.part + '</div>';
+    part.items.forEach(function(item){
+      var el = document.getElementById(item.id);
+      var val = el ? el.value.trim() : '';
+      html += '<div class="review-item">';
+      html += '<div class="review-item-q">' + item.q + '</div>';
+      if(val){
+        html += '<div class="review-item-a">' + val.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</div>';
+      } else {
+        html += '<div class="review-item-a empty">' + t.nothing_written + '</div>';
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+    if(pi < t.prompts.length - 1) html += '<hr class="review-divider">';
+  });
+
+  document.getElementById('review-content').innerHTML = html;
+}
+
+function exportAnswers(){
+  var t = T[LANG];
+  var date = new Date().toLocaleDateString(
+    LANG === 'nl' ? 'nl-BE' : LANG === 'fr' ? 'fr-FR' : 'en-GB',
+    {day:'numeric',month:'long',year:'numeric'}
+  );
+  var sep = Array(50).join('\u2500');
+  var out = 'DURIM MORINA\n' + t.brand_tagline + '\ndurimmorina.net\n\n';
+  out += t.review_doc_title.toUpperCase() + '\n' + date + '\n' + sep + '\n\n';
+
+  t.prompts.forEach(function(part){
+    out += part.part.toUpperCase() + '\n\n';
+    part.items.forEach(function(item){
+      var el = document.getElementById(item.id);
+      var val = el ? el.value.trim() : '';
+      out += item.q + '\n\n' + (val || t.nothing_written) + '\n\n';
+    });
+    out += sep + '\n\n';
+  });
+
+  out += 'durimmorina.net\n';
+
+  var encoded = 'data:text/plain;charset=utf-8,' + encodeURIComponent(out);
+  var w = window.open(encoded, '_blank');
+  if(!w || w.closed || typeof w.closed === 'undefined'){
+    window.location.href = encoded;
+  }
+}
+</script>
+</body>
+</html>
