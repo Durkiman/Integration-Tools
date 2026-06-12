@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #F5F0E8;
+    --cream-dark: #EDE6D6;
+    --ink: #2C2416;
+    --ink-muted: #6B5F4A;
+    --gold: #C4A882;
+    --gold-light: #E8D9C0;
+    --sage: #6B8C6B;
+  }
+
+  html, body { background: var(--cream); color: var(--ink); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+
+  header {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 64px 48px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  .logo {
+    width: 48px; height: 48px;
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-size: 38px;
+    line-height: 1.15;
+    letter-spacing: -0.3px;
+  }
+
+  header p {
+    font-size: 14px;
+    color: var(--ink-muted);
+    margin-top: 8px;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  .divider {
+    max-width: 860px;
+    margin: 36px auto 44px;
+    padding: 0 48px;
+  }
+  .divider svg { width: 100%; display: block; }
+
+  .section-label {
+    max-width: 860px;
+    margin: 0 auto 20px;
+    padding: 0 48px;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  .grid {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 48px 80px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .client-card {
+    background: #fff;
+    border: 1px solid var(--gold-light);
+    border-radius: 14px;
+    padding: 24px 22px 20px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .client-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent, var(--sage));
+    border-radius: 0 0 14px 14px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.22s ease;
+  }
+
+  .client-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(44,36,22,0.08);
+    border-color: var(--accent, var(--sage));
+  }
+
+  .client-card:hover::after { transform: scaleX(1); }
+
+  .client-initial {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--accent-bg, #E8F0E8);
+    color: var(--accent, var(--sage));
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+
+  .client-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 500;
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+
+  .client-card .meta {
+    font-size: 13px;
+    color: var(--ink-muted);
+    font-weight: 300;
+    line-height: 1.6;
+    flex-grow: 1;
+  }
+
+  .card-footer {
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .tool-count {
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.04em;
+  }
+
+  .arrow {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: 1px solid var(--gold-light);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .client-card:hover .arrow {
+    background: var(--accent, var(--sage));
+    border-color: var(--accent, var(--sage));
+  }
+  .client-card:hover .arrow svg path { stroke: #fff; }
+
+  footer {
+    text-align: center;
+    padding: 0 40px 48px;
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.06em;
+    font-weight: 300;
+  }
+
+  @media (max-width: 600px) {
+    header { padding: 40px 24px 0; flex-direction: column; gap: 14px; }
+    .divider, .section-label { padding: 0 24px; }
+    .grid { padding: 0 24px 60px; grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <svg class="logo" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+    <circle cx="24" cy="24" r="23" stroke="#6B8C6B" stroke-width="1"/>
+    <line x1="24" y1="38" x2="24" y2="25" stroke="#6B8C6B" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M24 31 Q16 27 12 20 Q10 14 16 13 Q21 12 23 19" stroke="#6B8C6B" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <path d="M24 27 Q18 24 15 18" stroke="#8FAF8F" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+    <path d="M24 31 Q32 27 36 20 Q38 14 32 13 Q27 12 25 19" stroke="#6B8C6B" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <path d="M24 27 Q30 24 33 18" stroke="#8FAF8F" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+  </svg>
+  <div>
+    <h1>Client Hub</h1>
+    <p>Your private overview of all active clients and their integration tools.</p>
+  </div>
+</header>
+
+<div class="divider">
+  <svg viewBox="0 0 764 16" height="16" preserveAspectRatio="none">
+    <path d="M0 12 Q191 3 382 9 Q573 15 764 6" stroke="#C4A882" stroke-width="0.8" fill="none" opacity="0.55"/>
+  </svg>
+</div>
+
+<div class="section-label">Active clients</div>
+
+<div class="grid">
+
+  <!-- CHARLOTTE -->
+  <a href="charlotte/index.html" class="client-card" style="--accent: #7BAFD4; --accent-bg: #E8F2F9;">
+    <div class="client-initial">C</div>
+    <h2>Charlotte</h2>
+    <p class="meta">1 tool · Agency &amp; acceptance</p>
+    <div class="card-footer">
+      <span class="tool-count">1 tool active</span>
+      <span class="arrow">
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+          <path d="M2 5.5h7M6 3l2.5 2.5L6 8" stroke="#7BAFD4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </div>
+  </a>
+
+  <!-- ADD CLIENT placeholder -->
+  <a href="#" class="client-card" style="--accent: var(--gold); --accent-bg: #F5EFE4; opacity: 0.5; pointer-events: none; border-style: dashed;">
+    <div class="client-initial" style="background: var(--cream-dark); color: var(--gold);">+</div>
+    <h2 style="color: var(--ink-muted);">New client</h2>
+    <p class="meta">Add the next client folder and update this card.</p>
+    <div class="card-footer">
+      <span class="tool-count">—</span>
+    </div>
+  </a>
+
+</div>
+
+<footer>breathwork integration · client hub</footer>
+
+</body>
+</html>
